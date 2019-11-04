@@ -35,6 +35,7 @@ library(plotrix)  # plotCI - to generate obsvered vs predicted plot with CIs
 library(scales)   # alpha() - for applying a transparency to data points
 library(devtools)
 library(httr)
+library(knitr)
 ```
 
 
@@ -52,15 +53,15 @@ source_GitHubData <-function(url, sep = ",", header = TRUE) {
 #--------------------------------------------------------------------------------------------------#
 ```
 
-```{r setup, include=FALSE, echo=FALSE}
+```{r}
 #--------------------------------------------------------------------------------------------------#
 ### Set working directory (scratch space)
-output_dir <- 'scratch'
-require("knitr")
-if (! file.exists(output_dir)) dir.create(file.path("~",output_dir),recursive=TRUE, showWarnings = FALSE)
+output_dir <- file.path("~",'scratch/')
+if (! file.exists(output_dir)) dir.create(file.path(output_dir),recursive=TRUE, showWarnings = FALSE)
 #setwd(file.path("~",wd)) # set working directory
-opts_knit$set(root.dir = file.path("~",output_dir))
+opts_knit$set(root.dir = file.path(output_dir))
 getwd()  # check wd
+print(output_dir)
 #--------------------------------------------------------------------------------------------------#
 ```
 
@@ -150,7 +151,7 @@ mean_spec <- colMeans(all_data[,which(names(all_data) %in% paste0("X",seq(Start.
 spectra_quantiles <- apply(all_data[,which(names(all_data) %in% paste0("X",seq(Start.wave,End.wave,1)))],
                            2,quantile,na.rm=T,probs=c(0,0.025,0.05,0.5,0.95,0.975,1))
 print("**** Plotting Ecosis data. Writing to scratch space ****")
-png(file=file.path("~",output_dir,'Angers_Lopex_spectra_summary_plot.png'),height=3000,
+png(file=file.path(output_dir,'Angers_Lopex_spectra_summary_plot.png'),height=3000,
     width=3900, res=340)
 par(mfrow=c(1,1), mar=c(4.5,5.7,0.3,0.4), oma=c(0.3,0.9,0.3,0.1)) # B, L, T, R
 plot(waves,mean_spec*100,ylim=c(0,ylim),cex=0.00001, col="white",xlab="Wavelength (nm)",
@@ -222,7 +223,7 @@ names(stats) <- c("FS_PLSR_Leaf_LMA_Sdev","FS_PLSR_Leaf_LMA_L5","FS_PLSR_Leaf_LM
 LeafLMA.PLSR.dataset.out <- data.frame(LeafLMA.PLSR.dataset,stats,
                                        residual=(LeafLMA.PLSR.dataset$FS_PLSR_LMA_gDW_m2-LeafLMA.PLSR.dataset$LMA_gDW_m2))
 # output results
-write.csv(x = LeafLMA.PLSR.dataset.out, file = file.path("~",output_dir,"Angers_Lopex_PLSR_estimated_LMA_data.csv"),
+write.csv(x = LeafLMA.PLSR.dataset.out, file = file.path(output_dir,"Angers_Lopex_PLSR_estimated_LMA_data.csv"),
           row.names = F)
 # calculate error stats
 rmse <- sqrt(mean(LeafLMA.PLSR.dataset.out$residual^2))
@@ -239,7 +240,7 @@ ptcex <- 1.8
 cexaxis <- 1.3
 cexlab <- 1.8
 print("**** Plotting Lopex/Angers LMA validation plot. Writing to scratch space ****")
-png(file=file.path("~",output_dir,'Angers_Lopex_LMA_validation_plot.png'),height=3000,
+png(file=file.path(output_dir,'Angers_Lopex_LMA_validation_plot.png'),height=3000,
     width=3900, res=340)
 par(mfrow=c(1,1), mar=c(4.5,5.4,1,1), oma=c(0.3,0.9,0.3,0.1)) # B, L, T, R
 plotCI(LeafLMA.PLSR.dataset.out$FS_PLSR_LMA_gDW_m2,LeafLMA.PLSR.dataset.out$LMA_gDW_m2,
