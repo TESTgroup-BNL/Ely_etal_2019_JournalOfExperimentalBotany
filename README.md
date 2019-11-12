@@ -3,6 +3,12 @@ Leaf-level Spectra-trait PLSR models to estimate key leaf traits associated with
 
 
 ## Contains:
+1) The final PLSR model coefficients for each leaf chemical and morphological leaf trait
+
+2) The article supplemental material as a PDF
+
+3) Example vignettes showing how to apply the final PLSR models to new datasets availible through EcoSIS
+
 
 ## Dataset citations and DOIs:
 The datasets used in this study are availible from the NASA EcoSIS database: https://doi.org/doi:10.21232/C2GM2Z
